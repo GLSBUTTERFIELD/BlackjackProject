@@ -4,7 +4,6 @@ import com.skilldistillery.cards.common.Card;
 import com.skilldistillery.cards.common.Deck;
 
 public class Dealer extends Player {
-//FIELDS - hand inherited from Player class
 	private Deck deck;
 	
 	public Dealer() {

@@ -5,10 +5,8 @@ import java.util.List;
 import com.skilldistillery.cards.common.Card;
 
 public class Player {
-//FIELD - only 1
 	protected BlackjackHand hand;
 
-//ctor
 	public Player() {
 		hand = new BlackjackHand();
 	}

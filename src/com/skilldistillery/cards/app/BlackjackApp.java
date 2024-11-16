@@ -8,7 +8,6 @@ import com.skilldistillery.cards.blackjack.Player;
 import com.skilldistillery.cards.common.Card;
 
 public class BlackjackApp {
-//FIELDS
 	private Dealer dealer;
 	private Player player;
 	private Scanner sc;

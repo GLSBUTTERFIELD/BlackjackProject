@@ -4,7 +4,6 @@ import com.skilldistillery.cards.common.AbstractHand;
 import com.skilldistillery.cards.common.Card;
 
 public class BlackjackHand extends AbstractHand {
-	// hand List inherited from AbstractHand
 
 	public BlackjackHand() {
 	}
