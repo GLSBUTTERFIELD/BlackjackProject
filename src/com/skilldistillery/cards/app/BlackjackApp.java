@@ -29,39 +29,8 @@ public class BlackjackApp {
 		System.out.println("Enter any key to get started.");
 		sc.nextLine();
 		dealFirstRound();
-		if (player.getHandValue() == 21) {
-			System.out.println("\nDealer " + dealer.showHand());
-			player.isBlackjack();
-			return;
-		}
-
-		int playerChoice = hitOrStay();
-
-		if (playerChoice == 1) {
-			Card nextCard = dealer.dealCard();
-			player.addCardToHand(nextCard);
-			System.out.println(player.showHand());
-			if (player.getHandValue() > 21) {
-				player.isBust();
-				System.out.println("\nDealer " + dealer.showHand());
-				return;
-			}
-
-			else if (player.getHandValue() == 21) {
-				player.is21();
-				return;
-			}
-
-			hitOrStay();
-
-		} else if (playerChoice == 2) {
-			System.out.println("Final Hand: " + player.showHand());
-			dealerTurn();
-
-		} else {
-			System.out.println("Invalid input.");
-			hitOrStay();
-		}
+		playerTurn();
+		
 
 	}
 
@@ -85,7 +54,40 @@ public class BlackjackApp {
 	}
 
 	public void playerTurn() {
-
+		if (player.getHandValue() == 21) {
+			System.out.println("\nDealer " + dealer.showHand());
+			player.isBlackjack();
+			return;
+		}
+		
+		int playerChoice = hitOrStay();
+		
+		if (playerChoice == 1) {
+			Card nextCard = dealer.dealCard();
+			player.addCardToHand(nextCard);
+			System.out.println(player.showHand());
+			if (player.getHandValue() > 21) {
+				player.isBust();
+				System.out.println("\nDealer " + dealer.showHand());
+				return;
+			}
+			
+			else if (player.getHandValue() == 21) {
+				player.is21();
+				return;
+			}
+			
+			hitOrStay();
+			
+		} else if (playerChoice == 2) {
+			System.out.println("Final Hand: " + player.showHand());
+			dealerTurn();
+			
+		} else {
+			System.out.println("Invalid input.");
+			hitOrStay();
+		}
+		
 	}
 
 	public void dealerTurn() {
