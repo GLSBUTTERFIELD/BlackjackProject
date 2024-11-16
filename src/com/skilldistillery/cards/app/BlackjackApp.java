@@ -27,9 +27,20 @@ public class BlackjackApp {
 
 		playerOptions();
 		// TODO Auto-generated method stub
+		
+//		public void stay () {
+//			System.out.println(hand);
+//		}
 
 	}
+	
+	public void playerTurn(){
+		
+	}
 
+	public void dealerTurn(){
+		
+	}
 	public void playerOptions() {
 		System.out.println("\nWhat would you like to do?");
 		System.out.println("1: hit/add card to your hand");

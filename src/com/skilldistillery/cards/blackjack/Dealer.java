@@ -16,8 +16,11 @@ public class Dealer extends Player {
 	}
 	
 	public Card[] dealCard(int numToDeal) {
-		return null;
+		Card[] dealtCards = new Card [numToDeal];
+		for (int i = 0; i < numToDeal; i++) {
+			dealtCards [i] = deck.dealCard();
+		}
+		return dealtCards;
 	}
-	
 	
 }
