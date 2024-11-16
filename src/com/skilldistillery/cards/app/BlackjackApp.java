@@ -30,7 +30,6 @@ public class BlackjackApp {
 		sc.nextLine();
 		dealFirstRound();
 		playerTurn();
-		
 
 	}
 
@@ -54,68 +53,75 @@ public class BlackjackApp {
 	}
 
 	public void playerTurn() {
-		if (player.getHandValue() == 21) {
-			System.out.println("\nDealer " + dealer.showHand());
-			player.isBlackjack();
+		if (player.isBlackjack()) {
+			System.out.println("\nBlackjack!");
+			dealerTurn();
 			return;
 		}
-		
+
 		int playerChoice = hitOrStay();
-		
+
 		if (playerChoice == 1) {
 			Card nextCard = dealer.dealCard();
 			player.addCardToHand(nextCard);
 			System.out.println(player.showHand());
-			if (player.getHandValue() > 21) {
-				player.isBust();
+
+			if (player.isBust()) {
+				System.out.println("You lose.");
 				System.out.println("\nDealer " + dealer.showHand());
 				return;
 			}
-			
-			else if (player.getHandValue() == 21) {
-				player.is21();
+
+			else if (player.is21()) {
+				System.out.println("You hit 21!");
+				dealerTurn();
 				return;
 			}
-			
+
 			hitOrStay();
-			
+
 		} else if (playerChoice == 2) {
 			System.out.println("Final Hand: " + player.showHand());
 			dealerTurn();
-			
+
 		} else {
 			System.out.println("Invalid input.");
 			hitOrStay();
 		}
-		
+
 	}
 
 	public void dealerTurn() {
 		int dealerHand = dealer.getHandValue();
+		if (dealer.isBlackjack()) {
+			System.out.println("\nDealer Blackjack!\nDealer wins.");
+			return;
+		}
 		while (dealerHand <= 17) {
 			Card nextCard = dealer.dealCard();
 			dealer.addCardToHand(nextCard);
 			dealerHand = dealer.getHandValue();
 		}
 
-		if (dealerHand > 21) {
-			dealer.isBust();
+		if (dealer.isBust()) {
 			System.out.println("\nDealer " + dealer.showHand());
 			System.out.println("\nYou win.");
+
 		} else if (dealerHand == player.getHandValue()) {
 			System.out.println("\nDealer " + dealer.showHand());
 			System.out.println("\nPush.");
+
 		} else {
 			if (dealerHand > player.getHandValue()) {
 				System.out.println("\nDealer " + dealer.showHand());
-				System.out.println("\nThe dealer won.");
+				System.out.println("\nThe dealer wins.");
 			} else {
 				System.out.println("\nDealer " + dealer.showHand());
-				System.out.println("\nYou won.");
+				System.out.println("\nYou win.");
 
 			}
 		}
-
+		playAgain();
 	}
 
 	public int hitOrStay() {
@@ -133,6 +139,33 @@ public class BlackjackApp {
 			System.err.println("Invalid input.");
 		}
 		return playerChoice;
+	}
+
+	public void playAgain() {
+		boolean keepGoing = true;
+		System.out.println("\nWould you like to play again?");
+		System.out.println("1: yes");
+		System.out.println("2: no");
+		try {
+			int playAgain = sc.nextInt();
+			sc.nextLine();
+			if (playAgain == 1) {
+				player.clearHand();
+				dealer.clearHand();
+				dealFirstRound();
+				playerTurn();
+				keepGoing = false;
+			} else if (playAgain == 2) {
+				System.out.println("Thanks for playing! Goodbye.");
+				keepGoing = false;
+			} else {
+				System.out.println("Invalid input. Please try again.");
+				keepGoing = true;
+			}
+		} catch (InputMismatchException e) {
+			System.out.println("Invalid input. Please try again.");
+			keepGoing = true;
+		}
 	}
 
 }

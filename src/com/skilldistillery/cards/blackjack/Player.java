@@ -26,20 +26,33 @@ public class Player {
 	}
 	
 	public boolean isBust () {
-		 System.out.println("You lose.");
-		 return true;
+		if (hand.getHandValue() > 21) {
+			return true;}
+		else {
+			return false;
+		}
 	}
 	
 	public boolean isBlackjack() {
-		hand.showHand();
-		System.out.println("\nBlackjack! You win.");
-		return true;
+		if (hand.getHandValue() ==21) {
+			return true;			
+		}
+		else {
+			return false;
+		}
 	}
 	
 	public boolean is21() {
-		hand.showHand();
-		System.out.println("You hit 21!");
+		if (hand.getHandValue() == 21) {
 		return true;
+	}
+		else {
+			return false;
+		}
+	}
+	
+	public void clearHand() {
+		hand.clear();
 	}
 	
 }

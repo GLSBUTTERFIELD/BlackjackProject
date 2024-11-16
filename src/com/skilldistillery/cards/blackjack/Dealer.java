@@ -26,10 +26,5 @@ public class Dealer extends Player {
 	public void shuffleDeck() {
 		deck.shuffleDeck();
 	}
-//	public Card showFirstCard() {
-//		Card firstCard = hand(0);
-////				hand.showHand().get(0);
-//		return firstCard;
-//	}
 	
 }
