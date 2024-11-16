@@ -26,4 +26,8 @@ public class Dealer extends Player {
 		deck.shuffleDeck();
 	}
 	
+	public void newDeck() {
+		deck = new Deck();
+	}
+	
 }

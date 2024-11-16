@@ -1,7 +1,5 @@
 package com.skilldistillery.cards.blackjack;
 
-import java.util.List;
-
 import com.skilldistillery.cards.common.Card;
 
 public class Player {

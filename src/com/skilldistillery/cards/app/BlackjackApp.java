@@ -27,8 +27,16 @@ public class BlackjackApp {
 		System.out.println("Welcome to the Skill Distillery Blackjack Game!");
 		System.out.println("Enter any key to get started.");
 		sc.nextLine();
-		dealFirstRound();
-		playerTurn();
+
+		boolean playAgain = true;
+		while (playAgain) {
+			dealFirstRound();
+			playerTurn();
+			dealerTurn();
+			checkWinner();
+			playAgain = playAgain();
+		}
+		System.out.println("\nThanks for playing! Goodbye.");
 
 	}
 
@@ -53,118 +61,129 @@ public class BlackjackApp {
 
 	public void playerTurn() {
 		if (player.isBlackjack()) {
-			System.out.println("\nBlackjack!");
-			dealerTurn();
+			if (dealer.getHandValue() < 21) {
+				System.out.println("\nPlayer Blackjack!");
+			} else if (dealer.isBlackjack()) {
+				System.out.println("Player and dealer Blackjack. Push");
+			}
 			return;
 		}
 
 		int playerChoice = hitOrStay();
 
-		if (playerChoice == 1) {
+		while (playerChoice == 1) {
 			Card nextCard = dealer.dealCard();
 			player.addCardToHand(nextCard);
-			System.out.println(player.showHand());
+			System.out.println("Player " + player.showHand());
 
 			if (player.isBust()) {
-				System.out.println("You lose.");
-				System.out.println("\nDealer " + dealer.showHand());
 				return;
 			}
 
 			else if (player.is21()) {
 				System.out.println("You hit 21!");
-				dealerTurn();
 				return;
 			}
+			playerChoice = hitOrStay();
+		}
 
-			hitOrStay();
-
-		} else if (playerChoice == 2) {
-			System.out.println("Final Hand: " + player.showHand());
-			dealerTurn();
+		if (playerChoice == 2) {
+			System.out.println("Player " + player.showHand());
+			return;
 
 		} else {
 			System.out.println("Invalid input.");
-			hitOrStay();
+			playerChoice = hitOrStay();
+			System.out.println("Player " + player.showHand());
 		}
-
-	}
-
-	public void dealerTurn() {
-		int dealerHand = dealer.getHandValue();
-		if (dealer.isBlackjack()) {
-			System.out.println("\nDealer Blackjack!\nDealer wins.");
-			return;
-		}
-		while (dealerHand <= 17) {
-			Card nextCard = dealer.dealCard();
-			dealer.addCardToHand(nextCard);
-			dealerHand = dealer.getHandValue();
-		}
-
-		if (dealer.isBust()) {
-			System.out.println("\nDealer " + dealer.showHand());
-			System.out.println("\nYou win.");
-
-		} else if (dealerHand == player.getHandValue()) {
-			System.out.println("\nDealer " + dealer.showHand());
-			System.out.println("\nPush.");
-
-		} else {
-			if (dealerHand > player.getHandValue()) {
-				System.out.println("\nDealer " + dealer.showHand());
-				System.out.println("\nThe dealer wins.");
-			} else {
-				System.out.println("\nDealer " + dealer.showHand());
-				System.out.println("\nYou win.");
-
-			}
-		}
-		playAgain();
 	}
 
 	public int hitOrStay() {
 		int playerChoice = 0;
 
 		System.out.println("\nWhat would you like to do?");
-		System.out.println("1: hit/add card to your hand");
-		System.out.println("2: stay\n");
+		System.out.println("1: Hit");
+		System.out.println("2: Stay\n");
 		try {
 			playerChoice = sc.nextInt();
-			sc.nextLine();
-		}
-
-		catch (InputMismatchException e) {
+		} catch (InputMismatchException e) {
 			System.err.println("Invalid input.");
+		} finally {
+			sc.nextLine();
 		}
 		return playerChoice;
 	}
 
-	public void playAgain() {
-		boolean keepGoing = true;
-		System.out.println("\nWould you like to play again?");
-		System.out.println("1: yes");
-		System.out.println("2: no");
+	public void dealerTurn() {
+		System.out.println("\nDealer " + dealer.showHand());
+		int dealerHand = dealer.getHandValue();
+		if (dealer.isBlackjack()) {
+			System.out.println("\nDealer Blackjack! Dealer wins.");
+			return;
+		} else if (player.isBlackjack() || player.isBust()) {
+			return;
+		}
+
+		while (dealerHand <= 17) {
+			Card nextCard = dealer.dealCard();
+			dealer.addCardToHand(nextCard);
+			dealerHand = dealer.getHandValue();
+			System.out.println("Dealer " + dealer.showHand());
+			if(dealer.is21()) {
+				System.out.println("Dealer hit 21. The dealer wins.");
+				return;
+			}
+		}
+	}
+
+	public void checkWinner() {
+		if (player.isBust()) {
+			System.out.println("\nPlayer bust. You lose.");
+		} else if (dealer.isBlackjack()) {
+			return;
+		} else if (dealer.isBust()) {
+			System.out.println("\nDealer bust. You win.");
+		} else if (dealer.getHandValue() == player.getHandValue() && !dealer.isBlackjack()) {
+			System.out.println("\nPush.");
+		} else if (dealer.getHandValue() > player.getHandValue()) {
+			System.out.println("\nThe dealer wins.");
+		} else if (dealer.getHandValue() < player.getHandValue()) {
+			System.out.println("\nYou win.");
+		}
+		return;
+	}
+
+	public boolean playAgain() {
+		playAgainMenu();
 		try {
 			int playAgain = sc.nextInt();
 			sc.nextLine();
 			if (playAgain == 1) {
-				player.clearHand();
-				dealer.clearHand();
-				dealFirstRound();
-				playerTurn();
-				keepGoing = false;
+				reset();
+				return true;
 			} else if (playAgain == 2) {
-				System.out.println("Thanks for playing! Goodbye.");
-				keepGoing = false;
+				return false;
 			} else {
-				System.out.println("Invalid input. Please try again.");
-				keepGoing = true;
+				System.out.println("Invalid input.");
+				return false;
 			}
 		} catch (InputMismatchException e) {
-			System.out.println("Invalid input. Please try again.");
-			keepGoing = true;
+			System.err.println("Invalid input.");
+			return false;
 		}
+	}
+
+	public void playAgainMenu() {
+		System.out.println("\nWould you like to play again?");
+		System.out.println("1: yes");
+		System.out.println("2: no");
+	}
+
+	public void reset() {
+		player.clearHand();
+		dealer.clearHand();
+		dealer.newDeck();
+		dealer.shuffleDeck();
 	}
 
 }
