@@ -21,8 +21,7 @@ public abstract class AbstractHand {
 		cardsInHand = new ArrayList<>();
 	}
 	
-	@Override
-	public String toString() {
-		return "Cards in hand: " + cardsInHand;
+	public String showHand() {
+		return "Cards: " + cardsInHand;
 	}
 }

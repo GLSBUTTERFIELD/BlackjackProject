@@ -13,7 +13,7 @@ public class Player {
 		hand = new BlackjackHand();
 	}
 
-	private void addCardToHand(Card card) {
+	public void addCardToHand(Card card) {
 		hand.addCard(card);
 	}
 
@@ -21,12 +21,25 @@ public class Player {
 		return hand.getHandValue();
 	}
 	
+	public String showHand() {
+		return hand.showHand() + "\nTotal: " + hand.getHandValue();
+	}
+	
 	public boolean isBust () {
-		return hand.isBust();
+		 System.out.println("You lose.");
+		 return true;
 	}
 	
 	public boolean isBlackjack() {
-		return hand.isBlackjack();
+		hand.showHand();
+		System.out.println("\nBlackjack! You win.");
+		return true;
+	}
+	
+	public boolean is21() {
+		hand.showHand();
+		System.out.println("You hit 21!");
+		return true;
 	}
 	
 }
