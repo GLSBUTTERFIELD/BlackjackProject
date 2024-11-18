@@ -132,7 +132,7 @@ public class BlackjackApp {
 			dealerValue = dealer.getHandValue();
 			System.out.println("Dealer " + dealer.showHand());
 			if (dealer.has21()) {
-				System.out.println("Dealer hit 21. The dealer wins.");
+				System.out.println("Dealer hit 21.");
 				return;
 			}
 		}
@@ -185,7 +185,7 @@ public class BlackjackApp {
 		player.clearHand();
 		dealer.clearHand();
 		if (dealer.shouldReshuffle()) {
-			System.out.println("\nDealer reshuffling deck");
+			System.out.println("\n[Dealer reshuffling deck]");
 			dealer.newDeck();
 		}
 	}
