@@ -43,32 +43,28 @@ public class BlackjackApp {
 	}
 
 	private void dealFirstRound() {
-		BlackjackHand dealerHand = dealer.getHand();
-		BlackjackHand playerHand = player.getHand();
 		System.out.println("\nDealing cards ...");
 		Card firstCard = dealer.dealCard();
-		playerHand.addCard(firstCard);
+		player.addCardToHand(firstCard);
 
 		Card secondCard = dealer.dealCard();
-		dealerHand.addCard(secondCard);
+		dealer.addCardToHand(secondCard);
 
 		Card thirdCard = dealer.dealCard();
-		playerHand.addCard(thirdCard);
-		System.out.println("Player Hand: \n" + firstCard + "\n" + thirdCard + "\nTotal: " + playerHand.getHandValue());
+		player.addCardToHand(thirdCard);
+		System.out.println("Player Hand: \n" + firstCard + "\n" + thirdCard + "\nTotal: " + player.getHandValue());
 
 		Card fourthCard = dealer.dealCard();
-		dealerHand.addCard(fourthCard);
+		dealer.addCardToHand(fourthCard);
 		System.out.println("\nDealer Hand: \n" + fourthCard + "\n[face down card]");
 
 	}
 
 	public void playerTurn() {
-		BlackjackHand playerHand = player.getHand();
-		BlackjackHand dealerHand = dealer.getHand();
-		if (playerHand.isBlackjack()) {
-			if (dealerHand.getHandValue() < 21) {
+		if (player.hasBlackjack()) {
+			if (dealer.getHandValue() < 21) {
 				System.out.println("\nPlayer Blackjack!");
-			} else if (dealerHand.isBlackjack()) {
+			} else if (dealer.hasBlackjack()) {
 				System.out.println("Player and dealer Blackjack. Push");
 			}
 			return;
@@ -78,14 +74,14 @@ public class BlackjackApp {
 
 		while (playerChoice == 1) {
 			Card nextCard = dealer.dealCard();
-			playerHand.addCard(nextCard);
+			player.addCardToHand(nextCard);
 			System.out.println("Player " + player.showHand());
 
-			if (playerHand.isBust()) {
+			if (player.isBusted()) {
 				return;
 			}
 
-			else if (playerHand.is21()) {
+			else if (player.has21()) {
 				System.out.println("You hit 21!");
 				return;
 			}
@@ -120,23 +116,22 @@ public class BlackjackApp {
 	}
 
 	public void dealerTurn() {
-		BlackjackHand dealerHand = dealer.getHand();
-		BlackjackHand playerHand = player.getHand();
+	
 		System.out.println("\nDealer " + dealer.showHand());
-		int dealerHandValue = dealerHand.getHandValue();
-		if (dealerHand.isBlackjack()) {
+		int dealerValue = dealer.getHandValue();
+		if (dealer.hasBlackjack()) {
 			System.out.println("\nDealer Blackjack! Dealer wins.");
 			return;
-		} else if (playerHand.isBlackjack() || playerHand.isBust()) {
+		} else if (player.hasBlackjack() || player.isBusted()) {
 			return;
 		}
 
-		while (dealerHandValue < 17) {
+		while (dealerValue < 17) {
 			Card nextCard = dealer.dealCard();
-			dealerHand.addCard(nextCard);
-			dealerHandValue = dealerHand.getHandValue();
+			dealer.addCardToHand(nextCard);
+			dealerValue = dealer.getHandValue();
 			System.out.println("Dealer " + dealer.showHand());
-			if (dealerHand.is21()) {
+			if (dealer.has21()) {
 				System.out.println("Dealer hit 21. The dealer wins.");
 				return;
 			}
@@ -144,19 +139,17 @@ public class BlackjackApp {
 	}
 
 	public void checkWinner() {
-		BlackjackHand dealerHand = dealer.getHand();
-		BlackjackHand playerHand = player.getHand();
-		if (playerHand.isBust()) {
+		if (player.isBusted()) {
 			System.out.println("\nPlayer bust. You lose.");
-		} else if (dealerHand.isBlackjack()) {
+		} else if (dealer.hasBlackjack()) {
 			return;
-		} else if (dealerHand.isBust()) {
+		} else if (dealer.isBusted()) {
 			System.out.println("\nDealer bust. You win.");
-		} else if (dealerHand.getHandValue() == playerHand.getHandValue() && !dealerHand.isBlackjack()) {
+		} else if (dealer.getHandValue() == player.getHandValue() && !dealer.hasBlackjack()) {
 			System.out.println("\nPush.");
-		} else if (dealerHand.getHandValue() > playerHand.getHandValue()) {
+		} else if (dealer.getHandValue() > player.getHandValue()) {
 			System.out.println("\nThe dealer wins.");
-		} else if (dealerHand.getHandValue() < playerHand.getHandValue()) {
+		} else if (dealer.getHandValue() < player.getHandValue()) {
 			System.out.println("\nYou win.");
 		}
 		return;
@@ -189,8 +182,8 @@ public class BlackjackApp {
 	}
 
 	public void reset() {
-		player.getHand().clear();
-		dealer.getHand().clear();
+		player.clearHand();
+		dealer.clearHand();
 		if (dealer.shouldReshuffle()) {
 			System.out.println("\nDealer reshuffling deck");
 			dealer.newDeck();
