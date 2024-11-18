@@ -3,6 +3,7 @@ package com.skilldistillery.cards.app;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.skilldistillery.cards.blackjack.BlackjackHand;
 import com.skilldistillery.cards.blackjack.Dealer;
 import com.skilldistillery.cards.blackjack.Player;
 import com.skilldistillery.cards.common.Card;
@@ -28,6 +29,7 @@ public class BlackjackApp {
 		System.out.println("Enter any key to get started.");
 		sc.nextLine();
 
+		dealer.newDeck();
 		boolean playAgain = true;
 		while (playAgain) {
 			dealFirstRound();
@@ -41,29 +43,32 @@ public class BlackjackApp {
 	}
 
 	private void dealFirstRound() {
-		dealer.shuffleDeck();
+		BlackjackHand dealerHand = dealer.getHand();
+		BlackjackHand playerHand = player.getHand();
 		System.out.println("\nDealing cards ...");
 		Card firstCard = dealer.dealCard();
-		player.addCardToHand(firstCard);
+		playerHand.addCard(firstCard);
 
 		Card secondCard = dealer.dealCard();
-		dealer.addCardToHand(secondCard);
+		dealerHand.addCard(secondCard);
 
 		Card thirdCard = dealer.dealCard();
-		player.addCardToHand(thirdCard);
-		System.out.println("Player Hand: \n" + firstCard + "\n" + thirdCard + "\nTotal: " + player.getHandValue());
+		playerHand.addCard(thirdCard);
+		System.out.println("Player Hand: \n" + firstCard + "\n" + thirdCard + "\nTotal: " + playerHand.getHandValue());
 
 		Card fourthCard = dealer.dealCard();
-		dealer.addCardToHand(fourthCard);
+		dealerHand.addCard(fourthCard);
 		System.out.println("\nDealer Hand: \n" + fourthCard + "\n[face down card]");
 
 	}
 
 	public void playerTurn() {
-		if (player.isBlackjack()) {
-			if (dealer.getHandValue() < 21) {
+		BlackjackHand playerHand = player.getHand();
+		BlackjackHand dealerHand = dealer.getHand();
+		if (playerHand.isBlackjack()) {
+			if (dealerHand.getHandValue() < 21) {
 				System.out.println("\nPlayer Blackjack!");
-			} else if (dealer.isBlackjack()) {
+			} else if (dealerHand.isBlackjack()) {
 				System.out.println("Player and dealer Blackjack. Push");
 			}
 			return;
@@ -73,14 +78,14 @@ public class BlackjackApp {
 
 		while (playerChoice == 1) {
 			Card nextCard = dealer.dealCard();
-			player.addCardToHand(nextCard);
+			playerHand.addCard(nextCard);
 			System.out.println("Player " + player.showHand());
 
-			if (player.isBust()) {
+			if (playerHand.isBust()) {
 				return;
 			}
 
-			else if (player.is21()) {
+			else if (playerHand.is21()) {
 				System.out.println("You hit 21!");
 				return;
 			}
@@ -115,21 +120,23 @@ public class BlackjackApp {
 	}
 
 	public void dealerTurn() {
+		BlackjackHand dealerHand = dealer.getHand();
+		BlackjackHand playerHand = player.getHand();
 		System.out.println("\nDealer " + dealer.showHand());
-		int dealerHand = dealer.getHandValue();
-		if (dealer.isBlackjack()) {
+		int dealerHandValue = dealerHand.getHandValue();
+		if (dealerHand.isBlackjack()) {
 			System.out.println("\nDealer Blackjack! Dealer wins.");
 			return;
-		} else if (player.isBlackjack() || player.isBust()) {
+		} else if (playerHand.isBlackjack() || playerHand.isBust()) {
 			return;
 		}
 
-		while (dealerHand <= 17) {
+		while (dealerHandValue < 17) {
 			Card nextCard = dealer.dealCard();
-			dealer.addCardToHand(nextCard);
-			dealerHand = dealer.getHandValue();
+			dealerHand.addCard(nextCard);
+			dealerHandValue = dealerHand.getHandValue();
 			System.out.println("Dealer " + dealer.showHand());
-			if(dealer.is21()) {
+			if (dealerHand.is21()) {
 				System.out.println("Dealer hit 21. The dealer wins.");
 				return;
 			}
@@ -137,17 +144,19 @@ public class BlackjackApp {
 	}
 
 	public void checkWinner() {
-		if (player.isBust()) {
+		BlackjackHand dealerHand = dealer.getHand();
+		BlackjackHand playerHand = player.getHand();
+		if (playerHand.isBust()) {
 			System.out.println("\nPlayer bust. You lose.");
-		} else if (dealer.isBlackjack()) {
+		} else if (dealerHand.isBlackjack()) {
 			return;
-		} else if (dealer.isBust()) {
+		} else if (dealerHand.isBust()) {
 			System.out.println("\nDealer bust. You win.");
-		} else if (dealer.getHandValue() == player.getHandValue() && !dealer.isBlackjack()) {
+		} else if (dealerHand.getHandValue() == playerHand.getHandValue() && !dealerHand.isBlackjack()) {
 			System.out.println("\nPush.");
-		} else if (dealer.getHandValue() > player.getHandValue()) {
+		} else if (dealerHand.getHandValue() > playerHand.getHandValue()) {
 			System.out.println("\nThe dealer wins.");
-		} else if (dealer.getHandValue() < player.getHandValue()) {
+		} else if (dealerHand.getHandValue() < playerHand.getHandValue()) {
 			System.out.println("\nYou win.");
 		}
 		return;
@@ -180,10 +189,12 @@ public class BlackjackApp {
 	}
 
 	public void reset() {
-		player.clearHand();
-		dealer.clearHand();
-		dealer.newDeck();
-		dealer.shuffleDeck();
+		player.getHand().clear();
+		dealer.getHand().clear();
+		if (dealer.shouldReshuffle()) {
+			System.out.println("\nDealer reshuffling deck");
+			dealer.newDeck();
+		}
 	}
 
 }

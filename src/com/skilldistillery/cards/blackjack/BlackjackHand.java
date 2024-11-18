@@ -18,20 +18,14 @@ public class BlackjackHand extends AbstractHand {
 	}
 
 	public boolean isBlackjack() {
-		if (getHandValue() == 21) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	public boolean isBust() {
-		if (getHandValue() > 21) {
-			return true;
-		} else {
-			return false;
-		}
+		return is21() && cardsInHand.size() == 2;
 	}
 
+	public boolean isBust() {
+		return getHandValue() > 21;
+	}
+
+	public boolean is21() {
+		return getHandValue() == 21;
+	}
 }
