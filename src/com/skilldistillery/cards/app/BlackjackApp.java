@@ -122,7 +122,6 @@ public class BlackjackApp {
 			Card nextCard = dealer.dealCard();
 			dealer.addCardToHand(nextCard);
 			dealerValue = dealer.getHandValue();
-//			System.out.println(dealerValue + "!!!!");
 			System.out.println("Dealer " + dealer.showHand());
 			if (dealer.has21()) {
 				System.out.println("Dealer hit 21.");

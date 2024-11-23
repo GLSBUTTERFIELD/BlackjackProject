@@ -1,9 +1,9 @@
 # BlackjackProject
 
 # Overview
-This program models a single player, one deck Blackjack game. The Aces are hard-coded to a value of 11 but the rest of the deck follows standard ranks. There are no splits, double downs, or other variations baked in. 
+This program models a single player, one deck Blackjack game. The Aces are hard-coded to 11 but if a hand containing an Ace will go over 21, the Ace will be refactored to a value of 1. There are no splits, double downs, or other variations baked in. 
 
-When the user enters into the game they are dealt a round of cards by the dealer. The player can see both of their cards along and total value and one of the dealer cards; the other remains hidden from the player. The game unfolds in different directions based on player choice and the dealer's cards: <ol><li>If the player has blackjack (21 on the first deal), the dealer's cards are revealed and the player either wins, or if the dealer also has blackjack there is a push (tie).</li><li>If the player does not have blackjack, they can hit (add another card to their hand) until they choose to stay (stand) or their total exceeds 21 (they bust). The dealer does not draw new cards if the player busts or has blackjack.</li><li>The dealer's turn begins once the player stays. If the dealer has blackjack, they automatically win (even if the player hits 21).</li><li>If the dealer's hand value is less than 17, they must hit until they reach 17 or more. If the dealer busts, the player wins.</li><li>If the dealer's hand value is between 17 and 21, it is compared against the player's hand value to determine who wins.</li></ol>
+When the user enters into the game they are dealt a round of cards by the dealer. The player can see both of their cards and total value and one of the dealer cards; the other dealer card remains hidden from the player. The game unfolds in different directions based on player choice and the dealer's cards: <ol><li>If the player has blackjack (21 on the first deal), the dealer's turn begins.</li><li>If they player does not have blackjack, they can choose to hit (add another card to their hand) until they choose to stay (stand) or if their total exceeds 21 (they bust).</li><li>The dealer's turn begins once the player stays. If the dealer's hand value is less than 17, they must hit until they reach 17 or more.</li><li>If the dealer's hand value is between 17 and 21, it is compared against the player's hand value to determine who wins.</li><li>If the player and dealer both have blackjack, both bust, or have the same hand value, they push (tie).</li></ol>
 
 The player may choose to play another game at which time the loop will begin again. When there are 17 or less cards remaining in the deck, the current hand finishes and the dealer clears and reshuffles, starting again with a fresh deck.
 
@@ -24,8 +24,8 @@ The player may choose to play another game at which time the loop will begin aga
 <li>Eclipse</li><ul>
 	<li>keyboard shortcuts</li>
 	<li>source menu commands</li></ul>
-<li>UML diagrams</li><ul>
-	<li>object oriented design</li></ul>
+<li>Object oriented design</li><ul>
+	<li>UML diagrams</li></ul>
 <li>Sublime</li>
 <li>Git/GitHub</li>
 <li>Unix CommandLine</li>
@@ -33,6 +33,9 @@ The player may choose to play another game at which time the loop will begin aga
 </ul>
 
 # Lessons Learned
+#### 11/23/24:
+I updated my program to account for the soft and hard Ace values and also moved all of the game logic out of the player and dealer turns and into the checkWinner(). I kept the Ace hard-coded to 11 but added conditional statements in the getHandValue() to count up the amount of Aces in hand and then minus 10 when the hand value exceeds 21 (making the Ace a "soft Ace"). I added hasAce() to both the BlackjackHand and Dealer classes, since the dealer must hit when they have 17 and an Ace. My first pass at adding logic into the getHandValue() had a nested If statement, which meant the Ace never became "soft" unless the hand contained two Aces. Anthony helped me use the Debugger and we went line by line to uncover that the second If statement should be contained in the For loop but separate from the first If statement and from there, the code worked!
+
 #### Overall:
 This program was definitely an exercise in OOP - from designing the different classes and methods, following the inherited methods and fields, and uncoupling things from each other to create more streamlined classes and methods. Setting up the Card and Deck classes together helped because it gave me a starting place to build from. The pattern of creating multiple classes without main methods and only one where everything happens is becoming more familiar and helps reinforce the concept of OOP where everything has one function each. 
 
