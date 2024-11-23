@@ -15,6 +15,10 @@ public class Card {
 		return rank.getValue();
 	}
 	
+	public Rank getRank() {
+		return rank;
+	}
+
 	@Override
 	public String toString() {
 		return rank.toString().substring(0,1) + rank.toString().substring(1).toLowerCase() + " of " + suit; 

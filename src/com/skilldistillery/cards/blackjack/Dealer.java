@@ -27,6 +27,10 @@ public class Dealer extends Player {
 		deck.shuffleDeck();
 	}
 
+	public boolean hasAce() {
+		return hand.hasAce();
+	}
+
 	// reshuffle deck when 1/3 of the deck remains
 	public boolean shouldReshuffle() {
 		return (deck.cardsLeftInDeck() <= 17);

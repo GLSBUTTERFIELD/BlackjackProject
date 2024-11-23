@@ -6,6 +6,8 @@ import java.util.Scanner;
 import com.skilldistillery.cards.blackjack.Dealer;
 import com.skilldistillery.cards.blackjack.Player;
 import com.skilldistillery.cards.common.Card;
+import com.skilldistillery.cards.common.Rank;
+import com.skilldistillery.cards.common.Suit;
 
 public class BlackjackApp {
 	private Dealer dealer;
@@ -61,11 +63,6 @@ public class BlackjackApp {
 
 	public void playerTurn() {
 		if (player.hasBlackjack()) {
-			if (dealer.getHandValue() < 21) {
-				System.out.println("\nPlayer Blackjack!");
-			} else if (dealer.hasBlackjack()) {
-				System.out.println("Player and dealer Blackjack. Push");
-			}
 			return;
 		}
 
@@ -115,20 +112,17 @@ public class BlackjackApp {
 	}
 
 	public void dealerTurn() {
-	
 		System.out.println("\nDealer " + dealer.showHand());
-		int dealerValue = dealer.getHandValue();
 		if (dealer.hasBlackjack()) {
-			System.out.println("\nDealer Blackjack! Dealer wins.");
-			return;
-		} else if (player.hasBlackjack() || player.isBusted()) {
 			return;
 		}
 
-		while (dealerValue < 17) {
+		int dealerValue = dealer.getHandValue();
+		while (dealerValue < 17 || dealerValue == 17 && dealer.hasAce()) {
 			Card nextCard = dealer.dealCard();
 			dealer.addCardToHand(nextCard);
 			dealerValue = dealer.getHandValue();
+//			System.out.println(dealerValue + "!!!!");
 			System.out.println("Dealer " + dealer.showHand());
 			if (dealer.has21()) {
 				System.out.println("Dealer hit 21.");
@@ -138,13 +132,19 @@ public class BlackjackApp {
 	}
 
 	public void checkWinner() {
-		if (player.isBusted()) {
-			System.out.println("\nPlayer bust. You lose.");
-		} else if (dealer.hasBlackjack()) {
-			return;
-		} else if (dealer.isBusted()) {
+		if (dealer.hasBlackjack() && player.hasBlackjack()) {
+			System.out.println("\nPlayer & Dealer blackjack. Push.");
+		} else if (player.hasBlackjack() && !dealer.hasBlackjack()) {
+			System.out.println("\nPlayer blackjack. You win.");
+		} else if (dealer.hasBlackjack() && !player.hasBlackjack()) {
+			System.out.println("/nDealer blackjack. The dealer wins.");
+		} else if (dealer.isBusted() && player.isBusted()) {
+			System.out.println("Dealer and player bust. Push.");
+		} else if (player.isBusted() && !dealer.isBusted()) {
+			System.out.println("\nPlayer bust. The dealer wins.");
+		} else if (dealer.isBusted() && !player.isBusted()) {
 			System.out.println("\nDealer bust. You win.");
-		} else if (dealer.getHandValue() == player.getHandValue() && !dealer.hasBlackjack()) {
+		} else if (dealer.getHandValue() == player.getHandValue()) {
 			System.out.println("\nPush.");
 		} else if (dealer.getHandValue() > player.getHandValue()) {
 			System.out.println("\nThe dealer wins.");
