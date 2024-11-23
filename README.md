@@ -33,7 +33,7 @@ The player may choose to play another game at which time the loop will begin aga
 </ul>
 
 # Lessons Learned
-#### 11/23/24:
+#### 11/23/24 Updates:
 I updated my program to account for the soft and hard Ace values and also moved all of the game logic out of the player and dealer turns and into the checkWinner(). I kept the Ace hard-coded to 11 but added conditional statements in the getHandValue() to count up the amount of Aces in hand and then minus 10 when the hand value exceeds 21 (making the Ace a "soft Ace"). I added hasAce() to both the BlackjackHand and Dealer classes, since the dealer must hit when they have 17 and an Ace. My first pass at adding logic into the getHandValue() had a nested If statement, which meant the Ace never became "soft" unless the hand contained two Aces. Anthony helped me use the Debugger and we went line by line to uncover that the second If statement should be contained in the For loop but separate from the first If statement and from there, the code worked!
 
 #### Overall:
