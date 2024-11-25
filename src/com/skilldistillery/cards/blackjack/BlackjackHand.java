@@ -3,7 +3,6 @@ package com.skilldistillery.cards.blackjack;
 import com.skilldistillery.cards.common.AbstractHand;
 import com.skilldistillery.cards.common.Card;
 import com.skilldistillery.cards.common.Rank;
-import com.skilldistillery.cards.common.Suit;
 
 public class BlackjackHand extends AbstractHand {
 	public BlackjackHand() {

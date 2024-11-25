@@ -6,8 +6,6 @@ import java.util.Scanner;
 import com.skilldistillery.cards.blackjack.Dealer;
 import com.skilldistillery.cards.blackjack.Player;
 import com.skilldistillery.cards.common.Card;
-import com.skilldistillery.cards.common.Rank;
-import com.skilldistillery.cards.common.Suit;
 
 public class BlackjackApp {
 	private Dealer dealer;
